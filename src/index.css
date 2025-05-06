@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+@theme {
+    --font-display: "Avenir", "Helvetica", "Arial", sans-serif;
+    --breakpoint-md: 57.5rem;
+    --color-main: #00bc77;
+}
