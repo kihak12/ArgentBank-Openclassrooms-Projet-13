@@ -1,7 +1,6 @@
 import {Header} from "../../components/Header/Header.jsx";
 import {Footer} from "../../components/Footer/Footer.jsx";
 import {FeatureItem} from "../../components/FeatureItem/FeatureItem.jsx";
-import {Fragment} from "react";
 
 export const Home = () => {
     const featureItems = [
@@ -34,7 +33,7 @@ export const Home = () => {
                 </div>
             </article>
         </section>
-        <section className={"grid grid-cols-3 justify-around w-full"}>
+        <section className={"grid grid-cols-1 md:grid-cols-3 justify-around w-full"}>
             {featureItems.map((item, index) => (
                 <FeatureItem key={index} title={item.title} text={item.text} icon={item.icon} />
             ))}
