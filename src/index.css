@@ -3,5 +3,17 @@
 @theme {
     --font-display: "Avenir", "Helvetica", "Arial", sans-serif;
     --breakpoint-md: 57.5rem;
+    --breakpoint-sm: 45rem;
+    --text-3xl: 2rem;
+    --text-4xl: 2.5rem;
     --color-main: #00bc77;
+    --color-main-darken: #008555;
+    --color-purple-950: #12002b;
+    --color-gray-700: #364153;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
 }
