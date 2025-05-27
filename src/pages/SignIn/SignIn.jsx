@@ -1,16 +1,28 @@
 import {Layout} from "../../layout/Layout.jsx";
 import {useNavigate} from "react-router";
+import {useDispatch} from "react-redux";
+import {login} from "../../api/backendCaller.jsx";
+import {setToken} from "../../store/UserStore.js";
+import {useState} from "react";
 
 export const SignIn = () => {
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState(null);
+
+    const dispatch = useDispatch()
 
     function loginUser() {
-        navigate("/user/1");
+        navigate("/user");
     }
 
     function handleSubmit(event) {
         event.preventDefault();
-        loginUser();
+        login(event.target.username.value, event.target.password.value).then(response => {
+            dispatch(setToken({token: response.body.token, remember: event.target.remember.checked}));
+            loginUser();
+        }).catch((error) => {
+            setErrorMessage(error.message);
+        })
     }
 
     return <>
@@ -21,12 +33,12 @@ export const SignIn = () => {
                     <h1 className={"text-2xl font-bold text-gray-700 my-3.5"}>Sign In</h1>
                     <form onSubmit={handleSubmit} className={"flex flex-col w-full"}>
                         <span className={"flex flex-col text-left mb-4"}>
-                            <label className={"font-semibold"} htmlFor="username">Username</label>
-                            <input className={"border p-1"} id={"username"} type="text"/>
+                            <label className={"font-semibold"} htmlFor="username">Username:</label>
+                            <input className={"border p-1"} id={"username"} type="text" required/>
                         </span>
                         <span className={"flex flex-col text-left mb-4"}>
                             <label className={"font-semibold"} htmlFor="password">Password</label>
-                            <input className={"border p-1"} id={"password"} type="password"/>
+                            <input className={"border p-1"} id={"password"} type="password" required/>
                         </span>
                         <span className={"inline-flex text-left mb-4 gap-2"}>
                             <input type="checkbox" id={"remember"}/>
@@ -34,6 +46,7 @@ export const SignIn = () => {
                         </span>
                         <input className={"flex items-center font-bold underline text-lg bg-main text-white p-1 cursor-pointer"} type="submit" value={"Sign In"}/>
                     </form>
+                    {errorMessage && <span className={"text-red-600 mt-2"}>{errorMessage}</span>}
                 </article>
             </section>
         </Layout>

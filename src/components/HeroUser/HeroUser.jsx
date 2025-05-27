@@ -1,8 +1,10 @@
-export const HeroUser = ({userName, userId}) => {
+export const HeroUser = ({user}) => {
+    const username = `${user.firstName} ${user.lastName}`;
     return <>
         <div className={"mb-8 flex flex-col items-center"}>
             <div className={"flex items-center justify-center my-4.5"}>
-                <span className={"text-white text-3xl font-bold text-center"}>Welcome back<br />{userName}!</span>
+                { user.firstName && <span className={"text-white text-3xl font-bold text-center"}>Welcome back<br />{username}!</span>}
+
             </div>
             <button className={"bg-main text-white px-2.5 py-2 text-sm mt-1.5 active:bg-main-darken transition-colors"}>Edit Name</button>
         </div>
