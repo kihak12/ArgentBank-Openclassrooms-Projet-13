@@ -1,15 +1,11 @@
 import {Layout} from "../../layout/Layout.jsx";
 import {useNavigate} from "react-router";
-import {useDispatch} from "react-redux";
 import {login} from "../../api/backendCaller.jsx";
-import {setToken} from "../../store/UserStore.js";
 import {useState} from "react";
 
 export const SignIn = () => {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState(null);
-
-    const dispatch = useDispatch()
 
     function loginUser() {
         navigate("/user");
@@ -18,7 +14,11 @@ export const SignIn = () => {
     function handleSubmit(event) {
         event.preventDefault();
         login(event.target.username.value, event.target.password.value).then(response => {
-            dispatch(setToken({token: response.body.token, remember: event.target.remember.checked}));
+            if (event.target.remember.checked) {
+                localStorage.setItem('token', response.body.token)
+            }else {
+                sessionStorage.setItem('token', response.body.token)
+            }
             loginUser();
         }).catch((error) => {
             setErrorMessage(error.message);

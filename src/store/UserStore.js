@@ -4,27 +4,28 @@ import {configureStore, createSlice} from '@reduxjs/toolkit'
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
-        token: localStorage.getItem('token') || sessionStorage.getItem('token') || undefined,
+        email: undefined,
+        password: undefined,
+        firstName: undefined,
+        lastName: undefined,
     },
     reducers: {
-        setToken: (state, action) => {
-            const token = decodeURI(action.payload.token)
-            if (action.payload.remember) {
-                localStorage.setItem('token', token)
-            }else {
-                sessionStorage.setItem('token', token)
-            }
-            state.token = token
+        setUser: (state, action) => {
+            state.email = action.email;
+            state.password = action.password;
+            state.firstName = action.firstName;
+            state.lastName = action.lastName;
         },
-        clearToken: (state) => {
-            state.token = undefined;
-            localStorage.removeItem('token');
-            sessionStorage.removeItem('token');
+        clearUser: (state) => {
+            state.email = undefined;
+            state.password = undefined;
+            state.firstName = undefined;
+            state.lastName = undefined;
         }
     },
 })
 
-export const {setToken, clearToken} = userSlice.actions
+export const {setUser, clearUser} = userSlice.actions
 
 export const store = configureStore({
     reducer: {

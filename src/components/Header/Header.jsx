@@ -1,13 +1,13 @@
 import {useNavigate} from "react-router";
 import {useDispatch, useSelector} from "react-redux";
-import {clearToken, setToken} from "../../store/UserStore.js";
+import {clearToken, clearUser, setToken} from "../../store/UserStore.js";
 
 export const Header = ({ firstName }) => {
     const navigate = useNavigate();
-    const userToken = useSelector((state) => state.user.token);
+    const userDetails = useSelector((state) => state.user);
     const dispatch = useDispatch()
 
-    const loggedIn = !!userToken;
+    const loggedIn = !!userDetails;
 
     function goToSignInPage() {
         navigate("/sign-in");
@@ -18,7 +18,7 @@ export const Header = ({ firstName }) => {
     }
 
     function signOut() {
-        dispatch(clearToken());
+        dispatch(clearUser());
         navigate("/sign-in");
     }
 
@@ -27,7 +27,7 @@ export const Header = ({ firstName }) => {
     }
 
     function logToken() {
-        console.log(userToken);
+        console.log(userDetails);
     }
 
     function setUserToken() {

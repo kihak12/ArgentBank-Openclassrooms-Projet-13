@@ -2,23 +2,29 @@ import {Layout} from "../../layout/Layout.jsx";
 import {HeroUser} from "../../components/HeroUser/HeroUser.jsx";
 import {TransactionCard} from "../../components/TransactionCard/TransactionCard.jsx";
 import {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router";
 import {getUserDetails} from "../../api/backendCaller.jsx";
 
 export const User = () => {
     const navigate = useNavigate();
-    const userToken = useSelector((state) => state.user.token);
+    const userStore = useSelector((state) => state.user);
+    const dispatch = useDispatch();
 
     const [user, setUser] = useState({});
 
     useEffect(() => {
+        const userToken = localStorage.getItem("token") | sessionStorage.getItem("token");
         if (!userToken) {
             navigate("/sign-in");
         }else {
-            getUserDetails(userToken).then(data => setUser(data));
+            getUserDetails(userToken).then(data => {
+                setUser(data);
+
+                dispatch(setUser(data));
+            });
         }
-    }, [userToken, navigate]);
+    }, [navigate, dispatch]);
 
     const transactions = [
         {
