@@ -1,30 +1,35 @@
 import {Layout} from "../../layout/Layout.jsx";
 import {HeroUser} from "../../components/HeroUser/HeroUser.jsx";
 import {TransactionCard} from "../../components/TransactionCard/TransactionCard.jsx";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router";
 import {getUserDetails} from "../../api/backendCaller.jsx";
+import {clearUser, setUser} from "../../store/UserStore.js";
 
 export const User = () => {
     const navigate = useNavigate();
-    const userStore = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const [user, setUser] = useState({});
+    const userDetails = useSelector((state) => state.user);
 
     useEffect(() => {
-        const userToken = localStorage.getItem("token") | sessionStorage.getItem("token");
+        const userToken = localStorage.getItem("token") || sessionStorage.getItem("token");
         if (!userToken) {
+            dispatch(clearUser());
             navigate("/sign-in");
-        }else {
+        }else if (!userDetails.email) {
             getUserDetails(userToken).then(data => {
-                setUser(data);
-
                 dispatch(setUser(data));
+            }).catch((error) => {
+                console.error(error);
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                dispatch(clearUser());
+                navigate("/sign-in");
             });
         }
-    }, [navigate, dispatch]);
+    }, [navigate, dispatch, userDetails]);
 
     const transactions = [
         {
@@ -46,7 +51,7 @@ export const User = () => {
     return <>
         <Layout>
             <section className={"h-full flex flex-col items-center bg-purple-950"}>
-                <HeroUser user={user}></HeroUser>
+                <HeroUser></HeroUser>
                 <section className={"w-full"}>
                     {transactions.map((item, index) => (
                         <TransactionCard key={index} operation={item.operation} balance={item.balance} id={item.id} />

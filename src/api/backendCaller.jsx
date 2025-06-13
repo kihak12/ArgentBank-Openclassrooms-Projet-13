@@ -25,3 +25,22 @@ export const getUserDetails = async (token) => {
         throw new Error(error.response.data.message);
     }
 }
+
+export const updateUserFirstAndLastName = async (token, {firstName, lastName}) => {
+    try {
+        const response = await axios.put(`${API_URL}/user/profile`,
+            {
+                firstName,
+                lastName
+            },
+            {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response.data.body;
+    } catch (error) {
+        console.error("Erreur lors de la requête:", error);
+        throw new Error(error.response.data.message);
+    }
+}

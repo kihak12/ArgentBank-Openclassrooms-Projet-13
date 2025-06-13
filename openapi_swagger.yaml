@@ -1,0 +1,374 @@
+openapi: 3.0.4
+info:
+  title: Bank Argent API documentation
+  description: Contains all available API endpoints in this codebase
+  version: "1.0.0"
+  termsOfService: "http://swagger.io/terms/"
+
+servers:
+  - url: http://localhost:3001/api/v1
+
+tags:
+  - name: User Module
+    description: Everything about user
+  - name: Transaction Module
+    description: Everything about transaction
+
+paths:
+  /user/login:
+    post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      requestBody:
+        description: Login Payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+      responses:
+        "200":
+          description: Login Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+
+  /user/signup:
+    post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      requestBody:
+        description: Signup Payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: Signup Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+
+  /user/profile:
+    post:
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for fetching a user profile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+
+    put:
+      tags:
+        - User Module
+      summary: User Profile API
+      description: API for updating a user profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Update user profile attributes
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserProfile"
+      responses:
+        "200":
+          description: User profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: Invalid Fields
+        "500":
+          description: Internal Server Error
+
+  /transactions:
+    get:
+      tags:
+        - Transaction Module
+      summary: List
+      description: API for listing transaction associated to a user
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Login Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiTransactionListResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "500":
+          description: Internal Server Error
+          
+  /transactions/{id}:
+    get:
+      tags:
+        - Transaction Module
+      summary: Find by ID
+      description: API for searching transaction by its ID
+      parameters:
+        - name: id
+          in: path
+          description: Transaction ID
+          required: true
+          schema:
+            type: number
+            example: 55
+        
+        
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Found Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiTransactionResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "404":
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "500":
+          description: Internal Server Error
+          
+    put:
+      tags:
+        - Transaction Module
+      summary: Update by ID
+      description: API for updating transaction by its ID
+      parameters:
+        - name: id
+          in: path
+          description: Transaction ID
+          required: true
+          schema:
+            type: number
+            example: 55
+      requestBody:
+        description: Update user profile attributes
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionUpdateBody"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Found Successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiTransactionResponse"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "404":
+          description: Transaction not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiTransactionResponse"
+        "500":
+          description: Internal Server Error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          description: user email
+        password:
+          type: string
+          description: user password
+        firstName:
+          type: string
+          description: user first name
+        lastName:
+          type: string
+          description: user last name
+
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          description: user email
+        password:
+          type: string
+          description: user password
+
+    ApiResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+
+    UserProfile:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+          
+    TransactionUpdateBody:
+      type: object
+      properties:
+        category:
+          type: string
+        notes:
+          type: string
+          
+    TransactionOperation:
+      type: string
+      description: Type d'opération bancaire
+      example: RECEIPT
+      enum:
+        - DEPOSIT
+        - WITHDRAWAL
+        - TRANSFER
+        - RECEIPT
+        - PAYMENT
+        - FEE
+        - REFUND
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 55
+        date:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+          example: 5.99
+        balance:
+          type: number
+          example: 2082.79
+        category:
+          type: string
+        notes:
+          type: string
+        operation:
+          $ref: "#/components/schemas/TransactionOperation"
+        
+    ApiTransactionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          $ref: "#/components/schemas/Transaction"
+          
+    ApiTransactionListResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        body:
+          type: array
+          items:
+            $ref: "#/components/schemas/Transaction"
+          
+          
+    InvalidApiTransactionResponse:
+      type: object
+      properties:
+        status:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Error Message
+        body:
+          type: object

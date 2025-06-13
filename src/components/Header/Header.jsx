@@ -1,13 +1,13 @@
 import {useNavigate} from "react-router";
 import {useDispatch, useSelector} from "react-redux";
-import {clearToken, clearUser, setToken} from "../../store/UserStore.js";
+import {clearUser} from "../../store/UserStore.js";
 
-export const Header = ({ firstName }) => {
+export const Header = () => {
     const navigate = useNavigate();
     const userDetails = useSelector((state) => state.user);
     const dispatch = useDispatch()
 
-    const loggedIn = !!userDetails;
+    const loggedIn = !!userDetails.email;
 
     function goToSignInPage() {
         navigate("/sign-in");
@@ -19,23 +19,13 @@ export const Header = ({ firstName }) => {
 
     function signOut() {
         dispatch(clearUser());
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('token');
         navigate("/sign-in");
     }
 
     function goToUserPage() {
         navigate("/user");
-    }
-
-    function logToken() {
-        console.log(userDetails);
-    }
-
-    function setUserToken() {
-        dispatch(setToken("YTfahbfa"));
-    }
-
-    function clearUserToken() {
-        dispatch(clearToken());
     }
 
     return <>
@@ -44,14 +34,11 @@ export const Header = ({ firstName }) => {
                 <button onClick={goToMainPage} className={"inline-flex w-[200px] max-w-full cursor-pointer"}>
                     <img src="/assets/argentBankLogo.png" alt="Argent Bank Logo"/>
                 </button>
-                <button onClick={logToken} className={"bg-yellow-400"}>Log</button>
-                <button onClick={setUserToken} className={"bg-main"}>Set</button>
-                <button onClick={clearUserToken} className={"bg-red-500"}>Clear</button>
                 { loggedIn ?
                     <div className={"flex items-center mr-2 gap-3"}>
                         <button onClick={goToUserPage} className={"hover:border-b border-gray-600 inline-flex items-center gap-1.5 font-bold text-gray-700 cursor-pointer"}>
                             <i className={"fa fa-user-circle"}></i>
-                            <span>{firstName}</span>
+                            <span>{userDetails.firstName}</span>
                         </button>
                         <button onClick={signOut} className={"hover:border-b border-gray-600 inline-flex items-center gap-1.5 font-bold text-gray-700 cursor-pointer"}>
                             <i className={"fa fa-sign-out"}></i>

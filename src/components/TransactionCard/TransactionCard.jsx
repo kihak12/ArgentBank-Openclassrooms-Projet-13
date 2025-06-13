@@ -6,7 +6,7 @@ export const TransactionCard =({operation, balance, id}) => {
                 <span className={"text-4xl font-bold text-gray-700"}>${balance}</span>
                 <span>Available Balance</span>
             </div>
-            <button className={"bg-main text-white font-bold p-2 text-lg active:bg-main-darken transition-colors sm:mt-0 mt-4 sm:w-[200px] w-full"}>View transactions</button>
+            <button className={"bg-main text-white font-bold p-2 text-lg active:bg-main-darken cursor-pointer transition-colors sm:mt-0 mt-4 sm:w-[200px] w-full"}>View transactions</button>
         </article>
     </>
 }

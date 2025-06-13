@@ -1,22 +1,31 @@
 import {Header} from "../components/Header/Header.jsx";
 import {Footer} from "../components/Footer/Footer.jsx";
-import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect} from "react";
 import {getUserDetails} from "../api/backendCaller.jsx";
+import {clearUser, setUser} from "../store/UserStore.js";
 
 export const Layout = ({children}) => {
-    const [user, setUser] = useState({});
-    const userToken = useSelector((state) => state.user.token);
+    const dispatch = useDispatch();
+    const userDetails = useSelector((state) => state.user);
 
     useEffect(() => {
-        if (userToken) {
-            getUserDetails(userToken).then(data => setUser(data));
+        const userToken = localStorage.getItem("token") || sessionStorage.getItem("token");
+        if (userToken && !userDetails.firstName) {
+            getUserDetails(userToken).then(data => {
+                dispatch(setUser(data));
+            }).catch((error) => {
+                console.error(error);
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                dispatch(clearUser());
+            });
         }
-    }, [userToken])
+    }, [dispatch, userDetails]);
 
     return (
         <>
-            <Header firstName={user.firstName} />
+            <Header />
             <div className={"flex-1 grid"}>
                 {children}
             </div>
