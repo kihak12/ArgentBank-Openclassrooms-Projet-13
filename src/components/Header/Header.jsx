@@ -30,7 +30,7 @@ export const Header = () => {
 
     return <>
         <header>
-            <nav className={"flex justify-between pr-1 sm:pr-0 sm:px-5 py-1.5"}>
+            <nav className={"flex justify-between pr-1 sm:px-5 py-1.5"}>
                 <button onClick={goToMainPage} className={"inline-flex w-[200px] max-w-full cursor-pointer"}>
                     <img src="/assets/argentBankLogo.png" alt="Argent Bank Logo"/>
                 </button>

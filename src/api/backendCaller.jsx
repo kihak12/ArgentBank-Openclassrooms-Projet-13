@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:3001/api/v1';
+const API_URL = 'https://api.argent-bank.jperret.dev/api/v1';
 
 export const login = async (email, password) => {
     try {
