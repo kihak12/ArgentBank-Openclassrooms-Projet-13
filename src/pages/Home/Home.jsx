@@ -22,8 +22,8 @@ export const Home = () => {
     return <>
         <Layout>
             <section className={"relative w-full h-[300px] md:h-[400px] bg-[url(/assets/bank-tree.jpeg)] bg-position-[left_33%] bg-cover"}>
-                <article className={"absolute bg-white top-12 right-12 p-8 m-8 "}>
-                    <div className={"w-80"}>
+                <article className={"absolute bg-white top-12 p-8 m-2 md:m-8 right-0 sm:right-12"}>
+                    <div className={"w-fit sm:w-80"}>
                         <div className={"flex flex-col font-bold text-2xl text-gray-700 leading-7"}>
                             <span className={"text-gray-700"}>No fees.</span>
                             <span className={"text-gray-700"}>No minimum deposit.</span>
